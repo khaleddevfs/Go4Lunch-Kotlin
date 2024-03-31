@@ -1,0 +1,188 @@
+<resources>
+    --- MENU ---
+    // BOTTOM NAVIGATION MENU
+    <string name="map_button_title">Map</string>
+    <string name="list_button_title">List</string>
+    <string name="coworkers_button_title">Workmates</string>
+
+    // DRAWER MENU
+    <string name="lunch_button_title">YOUR LUNCH</string>
+    <string name="settings_button_title">SETTINGS</string>
+    <string name="log_out_button_title">LOG OUT</string>
+
+    // SORT MENU
+    <string name="sort_button">sort</string>
+    <string name="sort_by_distance">sort by distance</string>
+    <string name="sort_by_participants">sort by participants</string>
+    <string name="sort_by_rate">sort by rate</string>
+
+    // TOOLBAR SEARCH MENU
+    <string name="search_button_title">search</string>
+
+    //ACTION BAR
+    <string name="hungry">I\'m Hungry!</string>>
+
+    --- LAYOUT ---
+
+    // COWORKERS ITEM LAYOUT
+    <string name="coworkers_picture" translatable="false" />
+    <string name="background_content_description" translatable="false" />
+    <string name="is_joining">is joining!</string>
+    <string name="is_eating">is eating</string>
+    <string name="has_not_decided_yet">has not decided yet</string>
+
+    // HEADER LAYOUT
+    <string name="header_drawer_picture" translatable="false" />
+    <string name="app_name">Go4Lunch</string>
+    <string name="user_picture" translatable="false" />
+
+    //RESTAURANT LIST
+    <string name="restaurant_closed_today">Closed today. Open at</string>
+    <string name="restaurant_on">Open</string>
+    <string name="closed">Closed</string>
+
+
+    // RESTAURANT DETAIL LAYOUT
+    <string name="restaurant_picture" translatable="false">restaurant picture</string>
+    <string name="call_button">CALL</string>
+    <string name="like_button">LIKE</string>
+    <string name="website_button">WEBSITE</string>
+    <string name="text_no_web_site">No Website</string>
+    <string name="text_no_phone_number">No phone number</string>
+    <string name="restaurant_favorite_button" translatable="false">Restaurant Favorite button</string>
+
+    // SETTING LAYOUT
+    <string name="settings_layout_title">Settings</string>
+    <string name="delete_account_button_text" translatable="false">delete account</string>
+    <string name="notification_disabled">Notification disabled</string>
+    <string name="notifications_enabled">Notifications enabled</string>
+    <string name="incorrect_username">Username not long enough</string>
+
+    // SIGNIN LAYOUT
+    <string name="logo_go_4_lunch" translatable="false" />
+    <string name="sign_in_second_title">Find a nice restaurant and invite your co-workers for lunch!</string>
+    <string name="facebook_login_button_text" translatable="false" />
+    <string name="adapted_facebook_login_button_text">sign in with Facebook</string>
+    <string name="google_login_button_text">sign in with Google</string>
+    <string name="adapted_twitter_login_button_text">sign in with Twitter</string>
+    <string name="error_unknown_error" translatable="false" />
+    <string name="yes" translatable="false" />
+
+    //NOTIFICATION
+    <string name="alert_dialog_notifications_message" translatable="false" />
+    <string name="notificationChannel" translatable="false">notificationChannel</string>
+    <string name="notification_message">You are eating at %s with %s on %s</string>
+    <string name="message_notification_alone">You are eating at %s on %s</string>
+    <string name="title_notification">Your lunch today</string>
+    <string name="subtitle_notification">You have a lunch setup for today</string>
+    <string name="name_channel" translatable="false">Go4Lunch channel</string>
+    <string name="description_channel" translatable="false">Notification channel</string>
+    <string name="no" translatable="false" />
+
+    //POSITION
+    <string name="default_latitude_position" translatable="false">48.8534100 </string>
+    <string name="default_longitude_position" translatable="false">2.3488000 </string>
+    <string name="proximity_radius" translatable="false">150 </string>
+    <string name="bound_radius" translatable="false">150 </string>
+    <string name="no_time">No Time available</string>
+
+
+    <!-- MAIN ACTIVITY -->
+    <string name="need_your_position">Needed for retrieve your position, thank you</string>
+    <string name="title_alert">WARING</string>
+    <string name="rational">if you want to take full advantage of GO4LUNCH, please closed your app, select appInfo and go to permissions, then allow GO4LUNCH to access to your location. Reload GO4LUNCH, enjoy your lunch, thank you !</string>
+    <string name="no_restaurant_selected">No restaurant has been selected</string>
+    <string name="channel">coco</string>
+    <string name="channel_description">Notification push</string>
+
+
+    <!-- USED IN NAVIGATION DRAWER -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="header_tittle">GO4LUNCH</string>
+    <string name="info_no_email_found">Email unavailable</string>
+    <string name="info_no_username_found">Username unavailable</string>
+
+
+    <!-- USED IN AUTHENTICATION -->
+    <string name="button_login_text_logged">Go!</string>
+    <string name="button_login_text_not_logged">Connexion</string>
+    <string name="connection_succeed">Authentication succeed !</string>
+    <string name="error_authentication_canceled">Authentication canceled</string>
+    <string name="error_no_internet">Internet unavailable</string>
+    <string name="auth_login_button">Login</string>
+    <string name="auth_logo">Logo</string>
+    <string name="auth_description">find a nice restaurant and invite your co-workers for lunch !</string>
+
+
+    <!-- RESTAURANT DETAILS RESULT REPOSITORY -->
+    <string name="restaurant_details_fields">formatted_phone_number,opening_hours,website,place_id</string>
+
+    <!-- AUTOCOMPLETE REPOSITORY -->
+    <string name="autocomplete_type">establishment</string>
+
+    <!-- RADIUS -->
+    <string name="radius">40000</string>
+
+    <!-- UPLOADWORKER CLASS -->
+    <string name="user_init_value">null</string>
+    <string name="separate">,</string>
+    <string name="and">&amp;</string>
+    <string name="notification_title">Time to lunch!</string>
+
+
+    <!-- MAIN ACTIVITY VIEW MODEL -->
+    <string name="no_current_user_restaurant_choice">No current user restaurant choice</string>
+
+
+    <!-- WORKMATES VIEW MODEL -->
+    <string name="not_decided">hasn\'t decided yet</string>
+    <string name="left_bracket">(</string>
+    <string name="right_bracket">)</string>
+
+    <!-- MESSAGE FOR DISTANCE -->
+    <string name="distance_unavailable">Distance unavailable</string>
+    <string name="m">m</string>
+
+    <!-- PHOTO URL -->
+    <string name="api_url">https://maps.googleapis.com/maps/api/place/</string>
+    <string name="photo_reference">photo?maxheight=1450&amp;maxwidth=1450&amp;photo_reference=</string>
+    <string name="and_key">&amp;key=</string>
+
+
+    <!-- MESSAGE FOR OPENING HOURS -->
+    <string name="open">Open</string>
+    <string name="closing_soon">Closing soon</string>
+    <string name="closed_until">Closed until</string>
+    <string name="closed_today">Closed today</string>
+    <string name="open_h24">Open 24/7</string>
+    <string name="open_until">Open until</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="permanently_closed">Permanently closed</string>
+    <string name="opening_hours_unavailable">Opening hours unavailable</string>
+    <string name="am">am</string>
+    <string name="pm">pm</string>
+    <string name="two_dots">:</string>
+    <string name="two_dots_for_minutes">:0</string>
+    <string name="dot">.</string>
+
+
+    <!-- RESTAURANT DETAILS VIEW MODEL -->
+    <string name="phone_number_unavailable">Phone number unavailable</string>
+    <string name="website_unavailable">https://www.google.com/</string>
+    <string name="background_black">#000000</string>
+    <string name="background_green">#69F0AE</string>
+
+    <!-- MESSAGE FOR PHOTO -->
+    <string name="photo_unavailable">Photo unavailable</string>
+
+    <!-- USED IN BOTTOM NAV VIEW -->
+    <string name="title_mapview">Map</string>
+    <string name="title_listview">Restaurants</string>
+    <string name="title_workmates">Workmates</string>
+
+
+    <string name="details_chose_button">Chose restaurant button</string>
+
+
+</resources>

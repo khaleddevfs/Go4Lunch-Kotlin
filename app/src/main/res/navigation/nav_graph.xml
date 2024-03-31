@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/bottom_navigation_menu_map_button">
+
+
+    <fragment
+        android:id="@+id/bottom_navigation_menu_map_button"
+        android:name="com.example.go4lunch24kotlin.fragment.MapFragment"
+        android:label="@string/title_mapview"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_to_listFragment"
+            app:destination="@id/bottom_navigation_menu_list_button"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bottom_navigation_menu_list_button"
+        android:name="com.example.go4lunch24kotlin.fragment.RestaurantsFragment"
+        android:label="@string/title_listview"
+        tools:layout="@layout/fragment_list_rest" >
+        <action
+            android:id="@+id/action_to_workMateFragment"
+            app:destination="@id/bottom_navigation_menu_workMates_button"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bottom_navigation_menu_workMates_button"
+        android:name="com.example.go4lunch24kotlin.fragment.WorkMatesFragment"
+        android:label="@string/title_workmates"
+        tools:layout="@layout/fragment_workmates" />
+</navigation>
+

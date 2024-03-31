@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.LoginActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/background_content_description"
+        android:src="@drawable/workmateslunch3"
+        android:scaleType="centerCrop" />
+
+
+    <ImageView
+        android:id="@+id/logo_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_logo_go4lunch"
+        android:contentDescription="@string/logo_go_4_lunch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_logo_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/app_name"
+        android:textColor="@color/colorWhite"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo_app" />
+
+    <com.google.android.material.button.MaterialButton
+        tools:ignore="MissingConstraints"
+        android:id="@+id/emailLoginButton"
+        style="@style/SignInButton"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/ic_baseline_login_24"
+        android:text="@string/fui_sign_in_with_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_logo_app" />
+
+    <com.google.android.material.button.MaterialButton
+        tools:ignore="MissingConstraints"
+        android:id="@+id/gmailLoginButton"
+        style="@style/SignInButton"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/google_plus_24"
+        android:text="@string/google_login_button_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailLoginButton"
+         />
+
+    <com.google.android.material.button.MaterialButton
+        tools:ignore="MissingConstraints"
+        android:id="@+id/twitterLoginButton"
+        style="@style/SignInButton"
+        android:backgroundTint="@color/twitter"
+        android:layout_marginTop="8dp"
+        android:drawableLeft="@drawable/fui_ic_twitter_bird_white_24dp"
+        android:text="@string/adapted_twitter_login_button_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gmailLoginButton"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
