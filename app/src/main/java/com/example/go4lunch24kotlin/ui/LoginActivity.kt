@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.go4lunch24kotlin.BaseActivity
 
 import com.example.go4lunch24kotlin.R
 import com.example.go4lunch24kotlin.databinding.ActivityLoginBinding
@@ -12,7 +14,7 @@ import com.example.go4lunch24kotlin.factory.Go4LunchFactory
 import com.example.go4lunch24kotlin.viewModel.LoginViewModel
 import com.google.firebase.FirebaseApp
 
-
+/*
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginBinding: ActivityLoginBinding
@@ -76,6 +78,60 @@ class LoginActivity : AppCompatActivity() {
                 // Ici, vous pourriez vouloir gérer les différents cas d'erreur
                 Toast.makeText(this, getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+}
+
+ */
+
+class LoginActivity : BaseActivity<ActivityLoginBinding>() {
+
+    private lateinit var viewModel: LoginViewModel
+
+    override val binding: ActivityLoginBinding by lazy {
+        ActivityLoginBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        initViewModel()
+        initListener()
+        checkSessionUser()
+    }
+
+    private fun initViewModel() {
+        val viewModelFactory = Go4LunchFactory.instance
+        viewModelFactory?.let {
+            viewModel = ViewModelProvider(this, it)[LoginViewModel::class.java]
+        } ?: run {
+            // Gestion de l'erreur si la factory est null
+        }
+    }
+
+    private fun initListener() {
+        binding.emailLoginButton.setOnClickListener { viewModel.startLoginActivityEmail(this) }
+        binding.gmailLoginButton.setOnClickListener { viewModel.startLoginActivityGoogle(this) }
+        binding.twitterLoginButton.setOnClickListener { viewModel.startLoginActivityTwitter(this) }
+    }
+
+    private fun checkSessionUser() {
+        if (viewModel.isCurrentUserLogged()) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        } else {
+            viewModel.updateCurrentUser()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == LoginViewModel.RC_SIGN_IN && resultCode == RESULT_OK) {
+            viewModel.updateCurrentUser()
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        } else {
+            Toast.makeText(this, getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show()
         }
     }
 }

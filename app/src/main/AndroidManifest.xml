@@ -4,9 +4,11 @@
 
     <!--PERMISSIONS-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -19,6 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Go4Lunch24"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
 
@@ -26,6 +29,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAqNBq03TA3U5NKCdGr7qrWHlIh5lsOI2w"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+
+        <!-- Launcher Activity -->
 
         <activity
             android:name=".ui.LoginActivity"
@@ -39,15 +48,18 @@
             </intent-filter>
         </activity>
 
+
+        <!-- Other Activities -->
+
         <activity
-            android:name="com.example.go4lunch24kotlin.ui.MainActivity"
-            android:parentActivityName="com.example.go4lunch24kotlin.ui.LoginActivity" />
+            android:name=".ui.MainActivity"
+            android:parentActivityName=".ui.LoginActivity" />
         <activity
-            android:name="com.example.go4lunch24kotlin.ui.RestaurantDetailsActivity"
-            android:parentActivityName="com.example.go4lunch24kotlin.ui.MainActivity" />
+            android:name=".ui.RestaurantDetailsActivity"
+            android:parentActivityName=".ui.MainActivity" />
         <activity
-            android:name="com.example.go4lunch24kotlin.ui.SettingActivity"
-            android:parentActivityName="com.example.go4lunch24kotlin.ui.MainActivity" />
+            android:name=".ui.SettingActivity"
+            android:parentActivityName=".ui.MainActivity" />
 
     </application>
 

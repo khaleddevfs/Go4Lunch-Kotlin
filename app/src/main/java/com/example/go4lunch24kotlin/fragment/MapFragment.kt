@@ -31,6 +31,7 @@ class MapFragment : SupportMapFragment(), OnMapReadyCallback, GoogleMap.OnMarker
 
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     override fun onMapReady(googleMap: GoogleMap) {
 
         Log.d("MapFragment", "Map is ready.") // Log lorsque la carte est prête
