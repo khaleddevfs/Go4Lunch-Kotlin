@@ -75,7 +75,7 @@ class GetRestaurantDetailsResultsUseCase(
     }
 }
 
- */
+
 
 import android.app.Application
 import androidx.lifecycle.MediatorLiveData
@@ -125,6 +125,63 @@ class GetRestaurantDetailsResultsUseCase(
                         }
                     }
                 }
+            }
+        }
+
+        return restaurantDetailsLiveData
+    }
+}
+ */
+import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import com.example.go4lunch24kotlin.R
+import com.example.go4lunch24kotlin.models.poko.RestaurantDetailsResult
+import com.example.go4lunch24kotlin.repository.LocationRepository
+import com.example.go4lunch24kotlin.repository.NearbySearchRepository
+import com.example.go4lunch24kotlin.repository.RestaurantDetailsRepository
+
+class GetRestaurantDetailsResultsUseCase(
+    private val locationRepository: LocationRepository,
+    private val nearbySearchRepository: NearbySearchRepository,
+    private val restaurantDetailsRepository: RestaurantDetailsRepository,
+    private val application: Application
+) {
+    companion object {
+        const val RESTAURANT = "restaurant"
+    }
+
+    fun invoke(): LiveData<List<RestaurantDetailsResult>> {
+        val restaurantDetailsLiveData = MediatorLiveData<List<RestaurantDetailsResult>>()
+        val restaurantDetailsList = mutableListOf<RestaurantDetailsResult>()
+
+        val locationLiveData = locationRepository.getLocationLiveData()
+
+        // Ajout du LiveData du NearbySearchRepository comme source
+        restaurantDetailsLiveData.addSource(nearbySearchRepository.restaurantListLiveData) { nearbySearchResults ->
+            nearbySearchResults?.results?.forEach { restaurant ->
+                val placeId = restaurant.restaurantId
+                // Assurez-vous que getRestaurantDetailsLiveData() existe et fonctionne comme prévu
+                val detailsLiveData = restaurantDetailsRepository.getRestaurantDetailsLiveData(placeId!!)
+                restaurantDetailsLiveData.addSource(detailsLiveData) { restaurantDetailsResult ->
+                    if (restaurantDetailsResult != null && !restaurantDetailsList.any { it.result?.placeId == placeId }) {
+                        restaurantDetailsList.add(restaurantDetailsResult)
+                        restaurantDetailsLiveData.value = restaurantDetailsList.toList()
+                    }
+                }
+            }
+        }
+
+        // Observe location changes to trigger NearbySearchRepository updates
+        restaurantDetailsLiveData.addSource(locationLiveData) { location ->
+            if (location != null) {
+                val locationAsText = "${location.latitude},${location.longitude}"
+                // Cela déclenchera une mise à jour interne dans NearbySearchRepository
+                nearbySearchRepository.getRestaurantListLiveData(
+                    RESTAURANT,
+                    locationAsText,
+                    application.getString(R.string.radius)
+                )
             }
         }
 

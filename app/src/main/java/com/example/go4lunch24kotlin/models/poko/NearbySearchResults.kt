@@ -8,5 +8,6 @@ data class NearbySearchResults constructor(
     // ADD EACH RESTAURANTS SEARCH IN A LIST
     @SerializedName("results")
     @Expose
-    var results: List<Restaurant>? = null
+   // var results: List<Restaurant>? = null
+    var results: List<Restaurant>?
 )

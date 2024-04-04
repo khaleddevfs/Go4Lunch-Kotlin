@@ -9,3 +9,9 @@ data class LocationMarker constructor(
     val locationMarkerLatLng: LatLng? = null,
     val isFavorite: Boolean = false
 )
+
+
+
+
+
+

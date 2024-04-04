@@ -21,17 +21,21 @@ class MapViewModel(
     getNearbySearchResultsUseCase: GetNearbySearchResultsUseCase,
     workMateRestaurantChoice: WorkMatesChoiceRepository,
     userSearchRepository: UserSearchRepository
-) : ViewModel(){
+) : ViewModel() {
     companion object {
         private const val ZOOM_FOCUS = 15f
     }
 
-    private var locationLiveData: MutableLiveData<Location?> = locationRepository.getLocationLiveData()
-    private var nearbySearchResultsLiveData: LiveData<NearbySearchResults> = getNearbySearchResultsUseCase.invoke()
-    private var workmatesWhoMadeRestaurantChoiceLiveData: LiveData<List<WorkMateRestaurantChoice>> = workMateRestaurantChoice.getWorkmatesRestaurantChoice()
-    private var usersSearchLiveData: LiveData<String> = userSearchRepository.getUsersSearchLiveData()
+    private var locationLiveData: MutableLiveData<Location?> =
+        locationRepository.getLocationLiveData()
+    private var nearbySearchResultsLiveData: LiveData<NearbySearchResults?> =
+        getNearbySearchResultsUseCase.invoke()
+    private var workmatesWhoMadeRestaurantChoiceLiveData: LiveData<List<WorkMateRestaurantChoice>> =
+        workMateRestaurantChoice.getWorkmatesRestaurantChoice()
+    private var usersSearchLiveData: LiveData<String> =
+        userSearchRepository.getUsersSearchLiveData()
 
-    val mapViewStatePoiMediatorLiveData = MediatorLiveData<MapViewState>().apply {
+    val mapViewStateLocationMarkerMediatorLiveData = MediatorLiveData<MapViewState>().apply {
         addSource(locationLiveData) { location ->
             combine(
                 location,
@@ -72,7 +76,42 @@ class MapViewModel(
         workMateRestaurantChoice: List<WorkMateRestaurantChoice>?,
         usersSearch: String?
     ) {
+        Log.d(
+            "MapViewModel",
+            "Combine called with usersSearch: $usersSearch"
+        ) // Log pour la fonction combine
+        if (!usersSearch.isNullOrEmpty()) {
+            Log.d("MapViewModel", "Processing mapUsersSearch") // Avant d'appeler mapUsersSearch
+            // Vérifiez que `nearbySearchResults` et `location` ne sont pas null avant d'appeler `mapUsersSearch`
+            if (nearbySearchResults != null && location != null) {
+                mapViewStateLocationMarkerMediatorLiveData.value = mapUsersSearch(
+                    location,
+                    nearbySearchResults,
+                    workMateRestaurantChoice,
+                    usersSearch
+                )
+            }
+        } else if (nearbySearchResults != null && location != null) {
+            Log.d(
+                "MapViewModel",
+                "Processing map with nearbySearchResults and location"
+            ) // Avant d'appeler map
+            mapViewStateLocationMarkerMediatorLiveData.value = map(
+                location,
+                nearbySearchResults,
+                workMateRestaurantChoice
+            )
+        }
+    }
 
+    /*   private fun combine(
+        location: Location?,
+        nearbySearchResults: NearbySearchResults?,
+        workMateRestaurantChoice: List<WorkMateRestaurantChoice>?,
+        usersSearch: String?
+    )
+
+    {
         Log.d("MapViewModel", "Combine called with usersSearch: $usersSearch") // Log pour la fonction combine
         if (!usersSearch.isNullOrEmpty()) {
             Log.d("MapViewModel", "Processing mapUsersSearch") // Avant d'appeler mapUsersSearch
@@ -94,6 +133,8 @@ class MapViewModel(
         }
     }
 
+  */
+
     // MAP WITH USER'S SEARCH ONLY
     private fun mapUsersSearch(
         location: Location?,
@@ -112,7 +153,10 @@ class MapViewModel(
                 restaurantAsFavoriteId.add(workMateRestaurantChoice[i].restaurantId!!)
             }
         }
-        Log.d("MapViewModel", "nearbySearchResults contains ${nearbySearchResults?.results?.size ?: "null"} results")
+        Log.d(
+            "MapViewModel",
+            "nearbySearchResults contains ${nearbySearchResults?.results?.size ?: "null"} results"
+        )
 
         for (i in nearbySearchResults!!.results!!.indices) {
             if (nearbySearchResults.results!![i].restaurantName!!.contains(usersSearch)) {
@@ -132,9 +176,13 @@ class MapViewModel(
             ),
             Companion.ZOOM_FOCUS
         ).also {
-            Log.d("MapViewModel", "mapUsersSearch: Created MapViewState with ${locationMarkerList.size} markers") // Log après création de MapViewState
+            Log.d(
+                "MapViewModel",
+                "mapUsersSearch: Created MapViewState with ${locationMarkerList.size} markers"
+            ) // Log après création de MapViewState
         }
     }
+
 
     private fun map(
         location: Location?,
@@ -155,7 +203,14 @@ class MapViewModel(
         }
 
         for (i in nearbySearchResults!!.results!!.indices) {
-            locationMarkerList.add(locationMarker(nearbySearchResults, i, workMateRestaurantChoice, restaurantAsFavoriteId))
+            locationMarkerList.add(
+                locationMarker(
+                    nearbySearchResults,
+                    i,
+                    workMateRestaurantChoice,
+                    restaurantAsFavoriteId
+                )
+            )
         }
 
         val userLocation = LatLng(
@@ -171,9 +226,15 @@ class MapViewModel(
             ),
             ZOOM_FOCUS
         ).also {
-            Log.d("MapViewModel", "map: Created MapViewState with ${locationMarkerList.size} markers") // Log après création de MapViewState
+            Log.d(
+                "MapViewModel",
+                "map: Created MapViewState with ${locationMarkerList.size} markers"
+            ) // Log après création de MapViewState
         }
     }
+
+
+
 
     private fun locationMarker(
         nearbySearchResults: NearbySearchResults,
@@ -183,7 +244,7 @@ class MapViewModel(
     ): LocationMarker {
         var isFavorite = false
         val locationMarkerName = nearbySearchResults.results!![i].restaurantName
-        val locationMarkerPlaceId = nearbySearchResults.results!![i].placeId
+        val locationMarkerPlaceId = nearbySearchResults.results!![i].restaurantId
         val locationMarkerAddress = nearbySearchResults.results!![i].restaurantAddress
         val locationMarkerLatLng = LatLng(
             nearbySearchResults
@@ -200,14 +261,18 @@ class MapViewModel(
             isFavorite = true
         }
 
-        return  LocationMarker(
-            locationMarkerName,
-            locationMarkerPlaceId,
-            locationMarkerAddress,
-            locationMarkerLatLng,
-            isFavorite
-        ).also {
-            Log.d("MapViewModel", "locationMarker: Created marker for $locationMarkerName, favorite: $isFavorite") // Log pour chaque marqueur créé
-        }
+    return  LocationMarker(
+    locationMarkerName,
+    locationMarkerPlaceId,
+    locationMarkerAddress,
+    locationMarkerLatLng,
+    isFavorite
+    ).also {
+        Log.d(
+            "MapViewModel",
+            "locationMarker: Created marker for $locationMarkerName, favorite: $isFavorite"
+        ) // Log pour chaque marqueur créé
     }
+
+}
 }

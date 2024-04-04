@@ -3,6 +3,7 @@ package com.example.go4lunch24kotlin.ui
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
@@ -124,6 +125,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == LoginViewModel.RC_SIGN_IN && resultCode == RESULT_OK) {
@@ -131,7 +133,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
-            Toast.makeText(this, getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show()
+            makeText(this, getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show()
         }
     }
 }

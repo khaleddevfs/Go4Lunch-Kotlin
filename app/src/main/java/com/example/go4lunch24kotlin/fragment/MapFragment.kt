@@ -69,7 +69,7 @@ class MapFragment : SupportMapFragment(), OnMapReadyCallback, GoogleMap.OnMarker
 
     @SuppressLint("MissingPermission")
     private fun setUserLocation(mapViewModel: MapViewModel, googleMap: GoogleMap) {
-        mapViewModel.mapViewStatePoiMediatorLiveData.observe(this) { (locationMarkerList, userLocation, zoom) ->
+        mapViewModel.mapViewStateLocationMarkerMediatorLiveData.observe(this) { (locationMarkerList, userLocation, zoom) ->
 
             Log.d("MapFragment", "Setting user location and markers.") // Log pour la mise à jour de l'emplacement de l'utilisateur et des marqueurs
 

@@ -46,7 +46,7 @@ class RestaurantsViewModel(
     }
 
     private var locationLiveData: MutableLiveData<Location?> = locationRepository.getLocationLiveData()
-    private var nearbySearchResultsLiveData: LiveData<NearbySearchResults> = getNearbySearchResultsUseCase.invoke()
+    private var nearbySearchResultsLiveData: LiveData<NearbySearchResults?> = getNearbySearchResultsUseCase.invoke()
     private var restaurantsDetailsResultLiveData: LiveData<List<RestaurantDetailsResult>> = getRestaurantDetailsResultsUseCase.invoke()
     private var workmatesWhoMadeRestaurantChoiceLiveData: LiveData<List<WorkMateRestaurantChoice>> = workMateRestaurantChoice.getWorkmatesRestaurantChoice()
     private var usersSearchLiveData: LiveData<String> = userSearchRepository.getUsersSearchLiveData()
@@ -109,7 +109,6 @@ class RestaurantsViewModel(
                 )
             }
         }
-
     private fun combine(
         location: Location?,
         nearbySearchResults: NearbySearchResults?,
@@ -119,32 +118,77 @@ class RestaurantsViewModel(
     ) {
         Log.d(TAG, "Combining data sources for updated view state")
 
+        // Fournir des listes vides comme valeurs par défaut si les données originales sont null
+        val safeRestaurantDetailsResults = restaurantDetailsResults ?: emptyList()
+        val safeWorkMateRestaurantChoice = workMateRestaurantChoice ?: emptyList()
 
-        if (location != null && workMateRestaurantChoice != null) {
-            if (nearbySearchResults != null && restaurantDetailsResults != null && !usersSearch.isNullOrEmpty()) {
+        if (location != null && nearbySearchResults != null) {
+            if (!usersSearch.isNullOrEmpty()) {
                 getRestaurantsWrapperViewStateMediatorLiveData.value = mapUsersSearch(
                     nearbySearchResults,
-                    restaurantDetailsResults,
+                    safeRestaurantDetailsResults,
                     location,
-                    workMateRestaurantChoice,
+                    safeWorkMateRestaurantChoice,
                     usersSearch
                 )
-            } else if (restaurantDetailsResults == null && nearbySearchResults != null) {
-                getRestaurantsWrapperViewStateMediatorLiveData.value = mapWithoutDetails(
-                    location,
-                    nearbySearchResults,
-                    workMateRestaurantChoice
-                )
-            } else if (restaurantDetailsResults != null && nearbySearchResults != null) {
-                getRestaurantsWrapperViewStateMediatorLiveData.value = mapWithDetails(
-                    location,
-                    nearbySearchResults,
-                    restaurantDetailsResults,
-                    workMateRestaurantChoice
-                )
+            } else {
+                if (safeRestaurantDetailsResults.isNotEmpty()) {
+                    getRestaurantsWrapperViewStateMediatorLiveData.value = mapWithDetails(
+                        location,
+                        nearbySearchResults,
+                        safeRestaurantDetailsResults,
+                        safeWorkMateRestaurantChoice
+                    )
+                } else {
+                    getRestaurantsWrapperViewStateMediatorLiveData.value = mapWithoutDetails(
+                        location,
+                        nearbySearchResults,
+                        safeWorkMateRestaurantChoice
+                    )
+                }
             }
         }
     }
+
+
+
+    /*   private fun combine(
+           location: Location?,
+           nearbySearchResults: NearbySearchResults?,
+           restaurantDetailsResults: List<RestaurantDetailsResult>?,
+           workMateRestaurantChoice: List<WorkMateRestaurantChoice>?,
+           usersSearch: String?
+       ) {
+           Log.d(TAG, "Combining data sources for updated view state")
+
+
+           if (location != null && workMateRestaurantChoice != null) {
+               if (nearbySearchResults != null && restaurantDetailsResults != null && !usersSearch.isNullOrEmpty()) {
+                   getRestaurantsWrapperViewStateMediatorLiveData.value = mapUsersSearch(
+                       nearbySearchResults,
+                       restaurantDetailsResults,
+                       location,
+                       workMateRestaurantChoice,
+                       usersSearch
+                   )
+               } else if (restaurantDetailsResults == null && nearbySearchResults != null) {
+                   getRestaurantsWrapperViewStateMediatorLiveData.value = mapWithoutDetails(
+                       location,
+                       nearbySearchResults,
+                       workMateRestaurantChoice
+                   )
+               } else if (restaurantDetailsResults != null && nearbySearchResults != null) {
+                   getRestaurantsWrapperViewStateMediatorLiveData.value = mapWithDetails(
+                       location,
+                       nearbySearchResults,
+                       restaurantDetailsResults,
+                       workMateRestaurantChoice
+                   )
+               }
+           }
+       }
+
+     */
 
     //************************************************************************//
     ///////////////////////////     DATA MAPPING     ///////////////////////////
@@ -179,7 +223,7 @@ class RestaurantsViewModel(
                     nearbySearchResults.results!![i].isPermanentlyClosed
                 )
                 val rating: Double = convertRatingStars(nearbySearchResults.results!![i].rating)
-                val restaurantId = nearbySearchResults.results!![i].placeId
+                val restaurantId = nearbySearchResults.results!![i].restaurantId
                 val usersWhoChoseThisRestaurant: String =
                     usersWhoChoseThisRestaurant(restaurantId, workMateRestaurantChoice)
                 val textColor: Int = getTextColor(openingHours)
@@ -230,7 +274,7 @@ class RestaurantsViewModel(
             val openingHours =
                 getOpeningHoursWithoutDetails(nearbySearchResults.results!![i].openingHours)
             val rating: Double = convertRatingStars(nearbySearchResults.results!![i].rating)
-            val restaurantId = nearbySearchResults.results!![i].placeId
+            val restaurantId = nearbySearchResults.results!![i].restaurantId
             val usersWhoChoseThisRestaurant: String =
                 usersWhoChoseThisRestaurant(restaurantId, workMateRestaurantChoice)
             val textColor: Int = getTextColor(openingHours)
@@ -269,7 +313,7 @@ class RestaurantsViewModel(
 
         for (restaurant in nearbySearchResults.results!!) {
             for (i in restaurantDetailsResults.indices) {
-                if (restaurantDetailsResults[i].result!!.placeId.equals(restaurant.placeId)) {
+                if (restaurantDetailsResults[i].result!!.placeId.equals(restaurant.restaurantId)) {
 
                     val distanceInt = distance(location, restaurant)
                     val name = restaurant.restaurantName
@@ -283,7 +327,7 @@ class RestaurantsViewModel(
                     val openingHours =
                         getOpeningHours(restaurantDetailsResults[i].result!!.openingHours, restaurant.isPermanentlyClosed)
                     val rating: Double = convertRatingStars(restaurant.rating)
-                    val restaurantId = restaurant.placeId
+                    val restaurantId = restaurant.restaurantId
                     val usersWhoChoseThisRestaurant: String =
                         usersWhoChoseThisRestaurant(restaurantId, workMateRestaurantChoice)
                     val textColor: Int = getTextColor(openingHours)

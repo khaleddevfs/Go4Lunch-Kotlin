@@ -61,43 +61,41 @@ data class Restaurant(
     var website: String? = null
 )
  */
-
 data class Restaurant constructor(
     @SerializedName("place_id")
-    @Expose
     var restaurantId: String? = null,
-    @SerializedName("name")
-    @Expose
-    var restaurantName: String? = null,
-    @SerializedName("vicinity")
-    @Expose
-    var restaurantAddress: String? = null,
-    @SerializedName("vicinity")
-    @Expose
-    var placeId: String? = null,
-    @SerializedName("photos")
-    @Expose
-    var restaurantPhotos: List<Photo>? = null,
-    @SerializedName("geometry")
-    @Expose
-    var restaurantGeometry: Geometry? = null,
-    @SerializedName("opening_hours")
-    @Expose
-    var openingHours: OpeningHours? = null,
-    @SerializedName("rating")
-    @Expose
-    var rating: Double = 0.0,
-    @SerializedName("user_ratings_total")
-    @Expose
-    var totalRatings: Int = 0,
-    @SerializedName("permanently_closed")
-    @Expose
-    var isPermanentlyClosed: Boolean = false,
-    @SerializedName("formatted_phone_number")
-    @Expose
-    var formattedPhoneNumber: String? = null,
-    @SerializedName("website")
-    @Expose
-    var website: String? = null
 
+    @SerializedName("name")
+    var restaurantName: String? = null,
+
+    @SerializedName("vicinity")
+    var restaurantAddress: String? = null,
+
+    // Cette ligne semble être redondante et doit être corrigée ou supprimée
+    // @SerializedName("vicinity")
+    // var placeId: String? = null,
+
+    @SerializedName("photos")
+    var restaurantPhotos: List<Photo>? = null,
+
+    @SerializedName("geometry")
+    var restaurantGeometry: Geometry? = null,
+
+    @SerializedName("opening_hours")
+    var openingHours: OpeningHours? = null,
+
+    @SerializedName("rating")
+    var rating: Double = 0.0,
+
+    @SerializedName("user_ratings_total")
+    var totalRatings: Int = 0,
+
+    @SerializedName("permanently_closed")
+    var isPermanentlyClosed: Boolean = false,
+
+    @SerializedName("formatted_phone_number")
+    var formattedPhoneNumber: String? = null,
+
+    @SerializedName("website")
+    var website: String? = null
 )

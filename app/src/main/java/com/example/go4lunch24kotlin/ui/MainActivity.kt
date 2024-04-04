@@ -2,6 +2,7 @@ package com.example.go4lunch24kotlin.ui
 
 import android.util.Log
 import android.Manifest
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -149,7 +150,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when (action) {
                 PermissionsAction.PERMISSION_ASKED -> {
                     ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
                         locationPermissionCode)
                     Toast.makeText(this, getString(R.string.need_your_position), Toast.LENGTH_SHORT)
                         .show()
@@ -311,3 +312,148 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
 }
+
+/*
+
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private lateinit var toolbar: Toolbar
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private var restaurantId: String? = null
+    private var currentUserRestaurantChoiceStatus = 0
+    private lateinit var adapter: PredictionsAdapter
+
+    private val locationPermissionCode = 100
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initializeBinding()
+        initializeViewModel()
+        configureUI()
+    }
+
+    private fun initializeBinding() {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    private fun initializeViewModel() {
+        val viewModelFactory = Go4LunchFactory.instance
+        mainActivityViewModel = ViewModelProvider(this, viewModelFactory)[MainActivityViewModel::class.java]
+    }
+
+    private fun configureUI() {
+        configureToolBar()
+        configureDrawerLayout()
+        configureNavigationView()
+        configureDrawerMenu()
+        configureNavController()
+        configureViewModelObservers()
+        updateUIWhenCreating()
+        configureRecyclerView()
+    }
+
+    private fun configureToolBar() {
+        toolbar = binding.mainToolbar
+        setSupportActionBar(toolbar)
+    }
+
+    private fun configureDrawerLayout() {
+        drawerLayout = binding.mainDrawerLayout
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+    }
+
+    // Les autres fonctions de configuration suivent un modèle similaire à configureToolBar()
+    // et configureDrawerLayout(), donc elles ne sont pas toutes réécrites ici pour éviter la répétition.
+
+    // Exemple de fonction pour gérer les permissions (simplifiée pour l'exemple)
+    private fun checkAndRequestPermissions() {
+        // Logique de vérification et de demande des permissions
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Gestion de la navigation
+    }
+
+    private fun configureNavigationView() {
+        Log.d("MainActivity", "Configuring NavigationView.") // Log pour configureNavigationView
+
+        val navigationView = findViewById<NavigationView>(R.id.main_navigation_view)
+        navigationView.setNavigationItemSelectedListener(this)
+    }
+
+    private fun configureDrawerMenu() {
+
+
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        appBarConfiguration = AppBarConfiguration.Builder(
+            R.id.bottom_navigation_menu_map_button, R.id.bottom_navigation_menu_list_button, R.id.bottom_navigation_menu_workMates_button)
+            .setOpenableLayout(drawerLayout)
+            .build()
+        Log.d("MainActivity", "Configuring transition.")
+    }
+
+    private fun updateUIWhenCreating() {
+
+        val header = binding.mainNavigationView.getHeaderView(0)
+        val profilePicture = header.findViewById<ImageView>(R.id.user_navigation_header_image_view_picture)
+        val profileUsername = header.findViewById<TextView>(R.id.user_navigation_header_name_text)
+        val profileUserEmail = header.findViewById<TextView>(R.id.user_navigation_header_email_text)
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        Log.d("MainActivity", "Updating UI when creating.") // Log pour updateUIWhenCreating
+
+        currentUser?.let { user ->
+            //Get picture URL from Firebase
+            val photoUrl = user.photoUrl
+            photoUrl?.let { photo ->
+                Glide.with(this)
+                    .load(photo)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(profilePicture)
+            }
+        }
+
+        //Get email & username from Firebase
+        val email =
+            if (TextUtils.isEmpty(currentUser!!.email)) getString(R.string.info_no_email_found) else currentUser.email!!
+        val username =
+            if (TextUtils.isEmpty(currentUser.displayName)) getString(R.string.info_no_username_found) else currentUser.displayName!!
+
+        //Update views with data
+        profileUsername.text = username
+        profileUserEmail.text = email
+    }
+
+    private fun configureYourLunch() {
+        mainActivityViewModel!!.getUserRestaurantChoice()
+        mainActivityViewModel!!.mainActivityYourLunchViewStateMediatorLiveData.observe(this) { userLunch ->
+            restaurantId = userLunch.restaurantId
+            currentUserRestaurantChoiceStatus = userLunch.currentUserRestaurantChoiceStatus
+        }
+    }
+
+    private fun configureRecyclerView() {
+        adapter = PredictionsAdapter { predictionText ->
+            mainActivityViewModel!!.userSearch(predictionText)
+            initAutocomplete()
+        }
+        val recyclerView = findViewById<RecyclerView>(R.id.predictions_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+        mainActivityViewModel!!.predictionsMediatorLiveData.observe(this) { predictions ->
+            adapter!!.submitList(predictions)
+        }
+    }
+}
+
+ */

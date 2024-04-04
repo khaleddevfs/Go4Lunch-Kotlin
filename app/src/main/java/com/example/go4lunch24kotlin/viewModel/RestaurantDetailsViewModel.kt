@@ -45,7 +45,7 @@ class RestaurantDetailsViewModel constructor(
 
     // INIT THE VIEW MODEL WITH THE PLACEID SEND IN THE INTENT
     fun init(placeId: String) {
-        val restaurantLiveData: LiveData<Restaurant> =
+        val restaurantLiveData: LiveData<Restaurant?> =
             getNearbySearchResultsByIdUseCase.invoke(placeId)
         val restaurantDetailsLiveData: LiveData<RestaurantDetailsResult?> =
             getRestaurantDetailsResultsByIdUseCase.invoke(placeId)
@@ -58,13 +58,16 @@ class RestaurantDetailsViewModel constructor(
 
         // OBSERVERS FOR RESTAURANT DETAILS
         restaurantDetailsViewStateMediatorLiveData.addSource(restaurantLiveData) { restaurant ->
+
+            if (restaurant != null) { // Assurez-vous que le restaurant n'est pas null avant de procéder
+
             combine(
                 restaurant,
                 workmatesWhoMadeRestaurantChoiceLiveData.value,
                 restaurantDetailsLiveData.value,
                 favoriteRestaurantsLiveData.value)
         }
-
+    }
         restaurantDetailsViewStateMediatorLiveData.addSource(restaurantDetailsLiveData) { restaurantDetailsResults ->
             combine(
                 restaurantLiveData.value,
@@ -176,7 +179,7 @@ class RestaurantDetailsViewModel constructor(
         var detailLikeButton = R.drawable.ic_baseline_star_border_24
         favoriteRestaurants?.let { favoriteRestaurantList ->
             for (restaurantInFavorite in favoriteRestaurantList) {
-                if (restaurantInFavorite.restaurantId!! == restaurant.placeId)
+                if (restaurantInFavorite.restaurantId!! == restaurant.restaurantId)
                     detailLikeButton = R.drawable.ic_baseline_star_rate_24
             }
         }
@@ -191,7 +194,7 @@ class RestaurantDetailsViewModel constructor(
                     + application.getString(R.string.MAPS_API_KEY),
             application.getString(R.string.phone_number_unavailable),
             application.getString(R.string.website_unavailable),
-            restaurant.placeId,
+            restaurant.restaurantId,
             convertRatingStars(restaurant.rating),
             restaurantChoiceState,
             detailLikeButton,
@@ -237,7 +240,7 @@ class RestaurantDetailsViewModel constructor(
         var detailLikeButton = R.drawable.ic_baseline_star_border_24
         favoriteRestaurants?.let { favoriteRestaurantList ->
             for (restaurantInFavorite in favoriteRestaurantList) {
-                if (restaurantInFavorite.restaurantId!! == restaurant.placeId)
+                if (restaurantInFavorite.restaurantId!! == restaurant.restaurantId)
                     detailLikeButton = R.drawable.ic_baseline_star_rate_24
             }
         }
@@ -252,7 +255,7 @@ class RestaurantDetailsViewModel constructor(
                     + application.getString(R.string.MAPS_API_KEY),
             restaurantPhoneNumber,
             restaurantWebsite,
-            restaurant.placeId,
+            restaurant.restaurantId,
             convertRatingStars(restaurant.rating),
             restaurantChoiceState,
             detailLikeButton,
@@ -269,7 +272,7 @@ class RestaurantDetailsViewModel constructor(
         val workMatesViewStateList = mutableListOf<RestaurantDetailsViewStateAdapter>()
 
         for (workMateChoice in workMateRestaurantChoice) {
-            if (workMateChoice.restaurantId == restaurant.placeId) {
+            if (workMateChoice.restaurantId == restaurant.restaurantId) {
                 for (user in users) {
                     if (user.uid == workMateChoice.userId) {
                         val name = user.userName + " " + application.getString(R.string.is_joining)
@@ -293,7 +296,7 @@ class RestaurantDetailsViewModel constructor(
 
         workMateRestaurantChoice?.let {
             for (user in workMateRestaurantChoice) {
-                if (user.restaurantId == restaurant.placeId && user.userId == userId) {
+                if (user.restaurantId == restaurant.restaurantId && user.userId == userId) {
                     return true
                 }
             }
